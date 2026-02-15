@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Boot Sequence | The Code Chronicle</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .paper-bg { background-color: #f1ebd9; background-image: repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(0,0,0,0.02) 2px, rgba(0,0,0,0.02) 4px); }
+        @keyframes inkFade { 0% { opacity: 0; filter: blur(4px); transform: scale(0.98); } 100% { opacity: 1; filter: blur(0); transform: scale(1); } }
+        .animate-ink { animation: inkFade 1s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+        @keyframes tickPulse { 0% { transform: scale(0.85); opacity: 0.5; } 20% { transform: scale(1.1); opacity: 1; } 100% { transform: scale(1); opacity: 1; } }
+        .animate-tick { animation: tickPulse 1s ease-out infinite; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        .animate-blink { animation: blink 1s infinite; }
+    </style>
+</head>
+<body class="paper-bg text-[#111] font-serif h-screen w-screen overflow-hidden flex flex-col p-2 sm:p-4 box-border selection:bg-black selection:text-[#f1ebd9]">
+    <main class="border-[6px] border-double border-black h-full w-full flex flex-col relative animate-ink bg-white/40">
+        <header class="flex-none border-b-[4px] border-black pb-2 pt-4 px-4 text-center">
+            <div class="flex justify-between items-center text-[10px] sm:text-xs font-bold uppercase tracking-widest border-b-2 border-black pb-1 mb-2">
+                <span>Section E: Execution</span>
+                <span>The Code Chronicle</span>
+                <span>Runtime Warning</span>
+            </div>
+            <h1 class="text-3xl sm:text-5xl md:text-6xl font-black uppercase tracking-tighter leading-none" style="font-family: 'Times New Roman', Times, serif;">
+                Boot Sequence
+            </h1>
+            <p class="italic text-[10px] sm:text-sm border-t border-black pt-1 mt-2">
+                "Spinning up containers. Preparing execution environment."
+            </p>
+        </header>
+
+        <div class="flex-grow flex flex-col items-center justify-center p-4 relative overflow-hidden">
+            <h2 class="text-xl sm:text-2xl font-bold uppercase tracking-widest text-center mb-4 sm:mb-8 border-b-2 border-black pb-2">
+                Execution Commences In:
+            </h2>
+            <div class="border-[4px] border-black bg-[#f1ebd9] shadow-[8px_8px_0px_rgba(0,0,0,1)] p-8 sm:p-12 min-w-[200px] sm:min-w-[300px] flex items-center justify-center">
+                <h1 id="count" class="text-[120px] sm:text-[180px] md:text-[220px] font-black leading-none font-mono animate-tick">
+                    3
+                </h1>
+            </div>
+            <div class="mt-8 sm:mt-12 text-center text-sm sm:text-base font-bold uppercase tracking-wider text-gray-700 animate-pulse">
+                Awaiting connection threshold...
+            </div>
+        </div>
+
+        <footer class="flex-none border-t-[4px] border-black bg-[#e5dfce] px-4 py-2 sm:py-3 text-center">
+            <div class="text-[10px] sm:text-xs font-bold uppercase tracking-wider flex justify-center items-center gap-1">
+                Authenticating session <span class="animate-blink font-black text-lg leading-none">_</span>
+            </div>
+        </footer>
+    </main>
+
+    <script>
+        let count = 3;
+        const countElement = document.getElementById("count");
+        let timer = setInterval(() => {
+            count--;
+            if(count > 0) {
+                countElement.innerText = count;
+                countElement.classList.remove("animate-tick");
+                void countElement.offsetWidth;
+                countElement.classList.add("animate-tick");
+            } else {
+                clearInterval(timer);
+                countElement.innerText = "RUN";
+                setTimeout(() => { window.location.href = "/quiz/{{ topic_id }}"; }, 600);
+            }
+        }, 1000);
+    </script>
+</body>
+</html>

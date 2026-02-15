@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Manage Test Cases | The Code Chronicle</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .paper-bg { background-color: #f1ebd9; background-image: repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(0,0,0,0.02) 2px, rgba(0,0,0,0.02) 4px); }
+        @keyframes inkFade { 0% { opacity: 0; filter: blur(3px); transform: translateY(5px); } 100% { opacity: 1; filter: blur(0); transform: translateY(0); } }
+        .animate-ink { animation: inkFade 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="paper-bg text-[#111] font-serif h-screen w-screen overflow-hidden flex flex-col p-2 sm:p-4 box-border selection:bg-black selection:text-[#f1ebd9]">
+    <main class="border-[6px] border-double border-black h-full w-full flex flex-col relative bg-white/40 overflow-hidden animate-ink">
+        <header class="flex-none border-b-[4px] border-black pb-2 pt-4 px-4 text-center">
+            <h1 class="text-3xl sm:text-5xl font-black uppercase tracking-tighter leading-none" style="font-family: 'Times New Roman', Times, serif;">
+                Manage Test Cases
+            </h1>
+        </header>
+
+        <div class="flex-grow flex flex-col p-2 sm:p-4 overflow-hidden relative">
+            <div class="h-full flex flex-col border-[3px] border-black bg-[#f1ebd9] shadow-[4px_4px_0px_rgba(0,0,0,1)]">
+                <div class="flex-none border-b-[3px] border-black bg-[#e5dfce]">
+                    <div class="grid grid-cols-[10%_35%_40%_15%] md:grid-cols-[10%_20%_55%_15%] font-black uppercase text-[10px] sm:text-xs tracking-widest p-2 sm:p-3 items-center text-center">
+                        <div class="pr-1">ID</div>
+                        <div class="border-l border-black pl-2 text-left whitespace-nowrap">Stack</div>
+                        <div class="border-l border-black pl-2 text-left">The Query</div>
+                        <div class="border-l border-black text-red-800">Action</div>
+                    </div>
+                </div>
+
+                <div class="flex-grow overflow-y-auto no-scrollbar bg-white/50">
+                    {% for q in questions %}
+                    <div class="grid grid-cols-[10%_35%_40%_15%] md:grid-cols-[10%_20%_55%_15%] items-center text-xs sm:text-sm p-3 border-b border-dashed border-gray-400 hover:bg-black hover:text-[#f1ebd9] transition-colors duration-150">
+                        <div class="text-center font-mono font-bold text-[10px] sm:text-sm">{{ q.id }}</div>
+
+                        <div class="pl-2 font-bold uppercase text-[9px] sm:text-sm tracking-tighter sm:tracking-normal break-words leading-tight font-mono" title="{{ q.topic_name }}">{{ q.topic_name }}</div>
+
+                        <div class="pl-2 pr-2 leading-tight font-mono text-[11px] sm:text-sm" style="word-break: break-word;">{{ q.question }}</div>
+
+                        <div class="text-center flex justify-center">
+                            <a href="/admin/delete_question/{{ q.id }}" onclick="return confirm('Permanently drop this query from database?')" class="bg-[#8b0000] text-[#f1ebd9] border border-black px-2 py-1 font-bold uppercase text-[10px] tracking-wider hover:bg-red-600 transition-colors">
+                                DROP
+                            </a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <footer class="flex-none border-t-[4px] border-black bg-[#e5dfce] px-4 py-2 sm:py-3 text-center">
+            <a href="/admin/dashboard" class="text-xs font-bold uppercase hover:underline">← Back to Terminal</a>
+        </footer>
+    </main>
+</body>
+</html>

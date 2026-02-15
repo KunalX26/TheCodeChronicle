@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Active Session | The Code Chronicle</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .paper-bg { background-color: #f1ebd9; background-image: repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(0,0,0,0.02) 2px, rgba(0,0,0,0.02) 4px); }
+        @keyframes inkFade { 0% { opacity: 0; filter: blur(3px); transform: translateY(5px); } 100% { opacity: 1; filter: blur(0); transform: translateY(0); } }
+        .animate-ink { animation: inkFade 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+        .urgent-tick { color: #8b0000; animation: pulse 1s infinite; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="paper-bg text-[#111] font-serif h-screen w-screen overflow-hidden flex flex-col p-2 sm:p-4 box-border selection:bg-black selection:text-[#f1ebd9]">
+    <main class="border-[6px] border-double border-black h-full w-full flex flex-col relative bg-white/40 overflow-hidden">
+
+        <header class="flex-none border-b-[4px] border-black pb-2 pt-3 px-3 sm:px-4">
+            <div class="flex justify-between items-center text-[10px] sm:text-xs font-bold uppercase tracking-widest border-b-2 border-black pb-1 mb-2">
+                <span class="hidden sm:inline">Section E: Active Execution</span>
+                <span>The Code Chronicle</span>
+                <button onclick="exitQuiz()" class="text-red-800 hover:text-red-600 hover:underline flex items-center gap-1 transition-colors z-10 relative">
+                    <span>[ ✕ ]</span> SIGKILL (Exit)
+                </button>
+            </div>
+            <div class="flex justify-between items-end mt-2">
+                <div>
+                    <h1 class="text-2xl sm:text-4xl md:text-5xl font-black uppercase tracking-tighter leading-none" style="font-family: 'Times New Roman', Times, serif;">
+                        Live Terminal
+                    </h1>
+                </div>
+                <div class="text-right border-l-4 border-black pl-3 sm:pl-4 ml-2">
+                    <div class="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-gray-600 mb-1">Timeout In</div>
+                    <div class="text-3xl sm:text-4xl font-mono font-black leading-none" id="timer-display">10</div>
+                </div>
+            </div>
+        </header>
+
+        <div class="flex-grow flex flex-col p-3 sm:p-6 overflow-hidden relative justify-center items-center">
+            <form id="quizForm" method="POST" action="/submit/{{ topic_id }}"></form>
+            <div id="question-container" class="w-full max-w-2xl h-full flex flex-col justify-center relative"></div>
+        </div>
+
+        <footer class="flex-none border-t-[4px] border-black bg-[#e5dfce] px-4 py-2 text-center border-b-8 border-transparent">
+            <div class="text-[10px] sm:text-xs font-bold uppercase tracking-wider flex justify-between items-center">
+                <span id="progress-text">Loading Dependencies...</span>
+                <span>Sysadmin Access Only</span>
+            </div>
+        </footer>
+    </main>
+
+    <script>
+        let questions = {{ questions | tojson | safe }};
+        let currentIndex = 0;
+        let timer;
+        let timeLeft = 10;
+        let answers = {};
+
+        loadQuestion();
+
+        function loadQuestion() {
+            if (currentIndex >= questions.length) { submitQuiz(); return; }
+
+            let q = questions[currentIndex];
+            let container = document.getElementById("question-container");
+            container.innerHTML = "";
+
+            document.getElementById("progress-text").innerText = `Process PID ${currentIndex + 1} of ${questions.length}`;
+
+            let wrapper = document.createElement("div");
+            wrapper.className = "animate-ink flex flex-col h-full justify-center";
+
+            let labelText = document.createElement("div");
+            labelText.className = "font-bold uppercase tracking-widest text-xs sm:text-sm border-b-2 border-black pb-1 mb-4 inline-block self-start font-mono";
+            labelText.innerText = `[Query ${currentIndex + 1}]:`;
+            wrapper.appendChild(labelText);
+
+            let questionText = document.createElement("h2");
+            questionText.className = "text-xl sm:text-2xl md:text-3xl font-black leading-tight mb-6 sm:mb-8 text-justify font-mono";
+            questionText.innerHTML = q.question;
+            wrapper.appendChild(questionText);
+
+            let optionsBox = document.createElement("div");
+            optionsBox.className = "flex flex-col gap-2 sm:gap-3 w-full";
+
+            createOption(q, "option1", optionsBox);
+            createOption(q, "option2", optionsBox);
+            createOption(q, "option3", optionsBox);
+            createOption(q, "option4", optionsBox);
+
+            wrapper.appendChild(optionsBox);
+            container.appendChild(wrapper);
+
+            let timerEl = document.getElementById("timer-display");
+            timerEl.classList.remove("urgent-tick");
+            timerEl.style.color = "#111";
+
+            startTimer();
+        }
+
+        function createOption(question, optionKey, parentBox) {
+            let optionBtn = document.createElement("button");
+            optionBtn.type = "button";
+            optionBtn.className = "quiz-option text-left w-full border-[3px] border-black bg-[#f1ebd9] shadow-[4px_4px_0px_rgba(0,0,0,1)] p-3 sm:p-4 font-bold text-sm sm:text-base hover:bg-black hover:text-[#f1ebd9] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all duration-150 font-mono";
+            optionBtn.innerText = question[optionKey] || "";
+            optionBtn.onclick = function () { checkAnswer(optionBtn, optionKey); };
+            parentBox.appendChild(optionBtn);
+        }
+
+        function startTimer() {
+            timeLeft = 10;
+            let timerEl = document.getElementById("timer-display");
+            timerEl.innerText = timeLeft;
+
+            timer = setInterval(function () {
+                timeLeft--;
+                timerEl.innerText = timeLeft;
+                if (timeLeft <= 3) { timerEl.classList.add("urgent-tick"); }
+                if (timeLeft <= 0) { clearInterval(timer); showTimeUpFeedback(); }
+            }, 1000);
+        }
+
+        function showTimeUpFeedback() {
+            let q = questions[currentIndex];
+            let options = document.querySelectorAll(".quiz-option");
+            options.forEach(function(opt) {
+                opt.style.pointerEvents = "none";
+                opt.classList.remove("hover:bg-black", "hover:text-[#f1ebd9]", "shadow-[4px_4px_0px_rgba(0,0,0,1)]");
+                opt.classList.add("opacity-50", "border-dashed");
+            });
+            options.forEach(function (opt, index) {
+                if ("option" + (index + 1) === q.correct_option) {
+                    opt.className = "quiz-option text-left w-full border-[3px] border-[#2d5a27] bg-[#f1ebd9] text-[#2d5a27] p-3 sm:p-4 font-bold text-sm sm:text-base shadow-[4px_4px_0px_rgba(45,90,39,1)] opacity-100 border-solid scale-[1.02] transition-transform font-mono";
+                }
+            });
+            answers[q.id] = "";
+            setTimeout(function () { currentIndex++; loadQuestion(); }, 1500);
+        }
+
+        function checkAnswer(selectedBtn, selectedOption) {
+            clearInterval(timer);
+            let q = questions[currentIndex];
+            let correctOption = q.correct_option;
+            let options = document.querySelectorAll(".quiz-option");
+
+            options.forEach(function (opt) {
+                opt.style.pointerEvents = "none";
+                opt.classList.remove("hover:bg-black", "hover:text-[#f1ebd9]", "shadow-[4px_4px_0px_rgba(0,0,0,1)]");
+                opt.classList.add("opacity-50", "border-dashed");
+            });
+
+            if (selectedOption === correctOption) {
+                selectedBtn.className = "quiz-option text-left w-full border-[3px] border-[#2d5a27] bg-[#2d5a27] text-[#f1ebd9] p-3 sm:p-4 font-bold text-sm sm:text-base shadow-[4px_4px_0px_rgba(45,90,39,1)] scale-[1.02] transition-transform opacity-100 border-solid font-mono";
+                answers[q.id] = selectedOption;
+            } else {
+                selectedBtn.className = "quiz-option text-left w-full border-[3px] border-[#8b0000] bg-[#8b0000] text-[#f1ebd9] p-3 sm:p-4 font-bold text-sm sm:text-base shadow-[4px_4px_0px_rgba(139,0,0,1)] scale-[1.02] transition-transform opacity-100 border-solid font-mono";
+                options.forEach(function (opt, index) {
+                    if ("option" + (index + 1) === correctOption) {
+                        opt.className = "quiz-option text-left w-full border-[3px] border-[#2d5a27] bg-[#f1ebd9] text-[#2d5a27] p-3 sm:p-4 font-bold text-sm sm:text-base opacity-100 border-solid font-mono";
+                    }
+                });
+                answers[q.id] = selectedOption;
+            }
+            setTimeout(function () { currentIndex++; loadQuestion(); }, 1500);
+        }
+
+        function submitQuiz() {
+            let form = document.getElementById("quizForm");
+            for (let id in answers) {
+                let input = document.createElement("input");
+                input.type = "hidden";
+                input.name = id;
+                input.value = answers[id] || "";
+                form.appendChild(input);
+            }
+            form.submit();
+        }
+
+        function exitQuiz() {
+            if (confirm("WARNING: Killing this process will drop your unsaved execution data. Proceed?")) {
+                window.location.href = "/";
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Draft Query | The Code Chronicle</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .paper-bg { background-color: #f1ebd9; background-image: repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(0,0,0,0.02) 2px, rgba(0,0,0,0.02) 4px); }
+        @keyframes inkFade { 0% { opacity: 0; filter: blur(3px); transform: translateY(5px); } 100% { opacity: 1; filter: blur(0); transform: translateY(0); } }
+        .animate-ink { animation: inkFade 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="paper-bg text-[#111] font-serif h-screen w-screen overflow-hidden flex flex-col p-2 sm:p-4 box-border selection:bg-black selection:text-[#f1ebd9]">
+    <main class="border-[6px] border-double border-black h-full w-full flex flex-col relative bg-white/40 overflow-hidden animate-ink">
+        <header class="flex-none border-b-[4px] border-black pb-2 pt-4 px-4 text-center">
+            <h1 class="text-3xl sm:text-5xl font-black uppercase tracking-tighter leading-none" style="font-family: 'Times New Roman', Times, serif;">
+                Draft Logic Query
+            </h1>
+        </header>
+
+        <div class="flex-grow overflow-y-auto no-scrollbar p-4 flex justify-center">
+            <form method="POST" class="w-full max-w-2xl border-[4px] border-black p-6 bg-[#f1ebd9] shadow-[6px_6px_0px_rgba(0,0,0,1)] h-max">
+                <div class="mb-6">
+                    <label class="block font-bold uppercase text-xs tracking-widest mb-1">Select Target Stack:</label>
+                    <select name="topic_id" class="w-full border-2 border-black bg-white p-2 font-mono font-bold cursor-pointer outline-none focus:ring-2 focus:ring-black">
+                        {% for t in topics %}
+                            <option value="{{ t.id }}">{{ t.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-6">
+                    <label class="block font-bold uppercase text-xs tracking-widest mb-1">Query Statement:</label>
+                    <input type="text" name="question" placeholder="Enter logic syntax..." required class="w-full border-b-2 border-black bg-transparent py-2 font-mono text-lg focus:border-b-4 focus:outline-none transition-all">
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+                    <div>
+                        <label class="block font-bold uppercase text-xs tracking-widest mb-1">String 1:</label>
+                        <input type="text" name="option1" placeholder="Return value..." required class="w-full border-2 border-black bg-white px-3 py-2 font-mono focus:outline-none focus:ring-2 focus:ring-black">
+                    </div>
+                    <div>
+                        <label class="block font-bold uppercase text-xs tracking-widest mb-1">String 2:</label>
+                        <input type="text" name="option2" placeholder="Return value..." required class="w-full border-2 border-black bg-white px-3 py-2 font-mono focus:outline-none focus:ring-2 focus:ring-black">
+                    </div>
+                    <div>
+                        <label class="block font-bold uppercase text-xs tracking-widest mb-1">String 3:</label>
+                        <input type="text" name="option3" placeholder="Return value..." required class="w-full border-2 border-black bg-white px-3 py-2 font-mono focus:outline-none focus:ring-2 focus:ring-black">
+                    </div>
+                    <div>
+                        <label class="block font-bold uppercase text-xs tracking-widest mb-1">String 4:</label>
+                        <input type="text" name="option4" placeholder="Return value..." required class="w-full border-2 border-black bg-white px-3 py-2 font-mono focus:outline-none focus:ring-2 focus:ring-black">
+                    </div>
+                </div>
+
+                <div class="mb-8 border-t-2 border-dashed border-black pt-4">
+                    <label class="block font-bold uppercase text-xs tracking-widest mb-1 text-green-800">Define Expected Output (Correct Answer):</label>
+                    <select name="correct" class="w-full border-2 border-[#2d5a27] text-[#2d5a27] bg-[#e8f0e7] p-2 font-mono font-bold cursor-pointer outline-none focus:ring-2 focus:ring-[#2d5a27]">
+                        <option value="option1">String 1</option>
+                        <option value="option2">String 2</option>
+                        <option value="option3">String 3</option>
+                        <option value="option4">String 4</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="w-full bg-black text-[#f1ebd9] font-black uppercase tracking-[0.2em] py-4 border-2 border-black hover:bg-transparent hover:text-black transition-colors duration-200">
+                    Commit to Repository
+                </button>
+            </form>
+        </div>
+
+        <footer class="flex-none border-t-[4px] border-black bg-[#e5dfce] px-4 py-2 sm:py-3 text-center">
+            <a href="/admin/dashboard" class="text-xs font-bold uppercase hover:underline">← Back to Terminal</a>
+        </footer>
+    </main>
+</body>
+</html>
