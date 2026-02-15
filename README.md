@@ -97,6 +97,7 @@ python app.py
 The application will boot up at http://127.0.0.1:5000/.
 
 📂 Project Structure Overview
+
 ● / - Front Page: Entry point for users to input their Developer Alias.
 
 ● /topics - Registry Index: Users select the Tech Stack they want to test.
@@ -112,6 +113,7 @@ The application will boot up at http://127.0.0.1:5000/.
 ● /admin/dashboard - Switchboard: Master control panel to add stacks, draft queries, and manage logs.
 
 🔮 Future Development Roadmap
+
 ● Implement connection pooling for robust multi-user database access.
 
 ● Transition from raw plaintext admin passwords to werkzeug.security password hashing.
