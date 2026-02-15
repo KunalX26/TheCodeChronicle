@@ -23,7 +23,7 @@ It allows users to test their programming logic against a ticking clock, dynamic
 
 Follow these steps to spin up the local development server.
 
-### 1. Clone the Repository
+1. Clone the Repository
 ```
 git clone [https://github.com/YOUR_USERNAME/the-code-chronicle.git](https://github.com/YOUR_USERNAME/the-code-chronicle.git)
 cd the-code-chronicle
@@ -96,28 +96,28 @@ python app.py
 ```
 The application will boot up at http://127.0.0.1:5000/.
 
-📂 Project Structure Overview
+## 📂 Project Structure Overview
 
-● / - Front Page: Entry point for users to input their Developer Alias.
+* / - Front Page: Entry point for users to input their Developer Alias.
 
-● /topics - Registry Index: Users select the Tech Stack they want to test.
+*  /topics - Registry Index: Users select the Tech Stack they want to test.
 
-● /ready/<id> - Boot Sequence: A 3-second animated countdown before execution.
+*  /ready/<id> - Boot Sequence: A 3-second animated countdown before execution.
 
-● /quiz/<id> - Active Session: The 10-question timed loop.
+*  /quiz/<id> - Active Session: The 10-question timed loop.
 
-● /leaderboard/<id> - Benchmarks: View the top-ranked aliases for a specific stack.
+*  /leaderboard/<id> - Benchmarks: View the top-ranked aliases for a specific stack.
 
-● /admin - Root Access: Secure login portal for administrators.
+*  /admin - Root Access: Secure login portal for administrators.
 
-● /admin/dashboard - Switchboard: Master control panel to add stacks, draft queries, and manage logs.
+*  /admin/dashboard - Switchboard: Master control panel to add stacks, draft queries, and manage logs.
 
-🔮 Future Development Roadmap
+## 🔮 Future Development Roadmap
 
-● Implement connection pooling for robust multi-user database access.
+*  Implement connection pooling for robust multi-user database access.
 
-● Transition from raw plaintext admin passwords to werkzeug.security password hashing.
+*  Transition from raw plaintext admin passwords to werkzeug.security password hashing.
 
-● Refactor database ranking logic to utilize SQL window functions (RANK() OVER) for improved scalability.
+*  Refactor database ranking logic to utilize SQL window functions (RANK() OVER) for improved scalability.
 
-● Consolidate repeating UI elements using Jinja2 base.html inheritance.
+*  Consolidate repeating UI elements using Jinja2 base.html inheritance.
