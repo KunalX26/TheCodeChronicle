@@ -24,18 +24,21 @@ It allows users to test their programming logic against a ticking clock, dynamic
 Follow these steps to spin up the local development server.
 
 ### 1. Clone the Repository
-```bash
+```
 git clone [https://github.com/YOUR_USERNAME/the-code-chronicle.git](https://github.com/YOUR_USERNAME/the-code-chronicle.git)
 cd the-code-chronicle
+```
 2. Set Up the Virtual Environment & Dependencies
-Bash
+```
 python -m venv venv
 source venv/bin/activate  # On Windows use: venv\Scripts\activate
 pip install Flask mysql-connector-python
+```
 3. Database Configuration
 Ensure MySQL is running on your machine. Log into your MySQL server and execute the following schema to set up the quiz_db database:
 
 SQL
+```
 CREATE DATABASE quiz_db;
 USE quiz_db;
 
@@ -74,19 +77,23 @@ CREATE TABLE results (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (topic_id) REFERENCES topics(id) ON DELETE CASCADE
 );
+```
 4. Configure Application Variables
 In app.py, update the database connection variables to match your local MySQL setup:
 
 Python
+```
 db = mysql.connector.connect(
     host="localhost",
     user="root",          # Replace with your MySQL username
     password="",          # Replace with your MySQL password
     database="quiz_db"
 )
+```
 5. Initialize the Server
-Bash
+```
 python app.py
+```
 The application will boot up at http://127.0.0.1:5000/.
 
 📂 Project Structure Overview
