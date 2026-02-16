@@ -2,17 +2,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>All Rankings | The Code Chronicle</title>
     <meta name="theme-color" content="#f1ebd9">
     <link rel="manifest" href="/static/manifest.json">
 
     <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico?v=2">
-
     <link rel="apple-touch-icon" sizes="180x180" href="/static/images/logo.png?v=2">
-
     <link rel="icon" type="image/png" sizes="192x192" href="/static/images/logo.png?v=2">
     <link rel="icon" type="image/png" sizes="512x512" href="/static/images/logo.png?v=2">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .paper-bg {
@@ -49,13 +48,13 @@
 
                 <div class="flex-none border-b-[3px] border-black bg-[#e5dfce]">
                     <div class="grid grid-cols-[30%_35%_15%_20%] md:grid-cols-[5%_20%_10%_20%_10%_20%_15%] font-black uppercase text-[10px] sm:text-xs tracking-widest p-2 sm:p-3 items-center text-center">
-                        <div class="hidden md:block pr-1">ID</div>
-                        <div class="md:border-l md:border-black text-left pl-2 whitespace-nowrap">Stack</div>
-                        <div class="hidden md:block border-l border-black">Rank</div>
-                        <div class="border-l border-black text-left pl-2 whitespace-nowrap">Alias</div>
-                        <div class="border-l border-black">Score</div>
-                        <div class="hidden md:block border-l border-black truncate">Date</div>
-                        <div class="border-l border-black text-red-800">Action</div>
+                        <div class="hidden md:block pr-1 truncate min-w-0">ID</div>
+                        <div class="md:border-l md:border-black text-left pl-2 truncate min-w-0">Stack</div>
+                        <div class="hidden md:block border-l border-black truncate min-w-0">Rank</div>
+                        <div class="border-l border-black text-left pl-2 truncate min-w-0">Alias</div>
+                        <div class="border-l border-black truncate min-w-0">Score</div>
+                        <div class="hidden md:block border-l border-black truncate min-w-0">Date</div>
+                        <div class="border-l border-black text-red-800 truncate min-w-0">Action</div>
                     </div>
                 </div>
 
@@ -63,19 +62,19 @@
                     {% for r in rankings %}
                     <div class="grid grid-cols-[30%_35%_15%_20%] md:grid-cols-[5%_20%_10%_20%_10%_20%_15%] items-center text-xs sm:text-sm p-2 sm:p-3 border-b border-dashed border-gray-400 hover:bg-black hover:text-[#f1ebd9] transition-colors duration-150 cursor-default">
 
-                        <div class="hidden md:block text-center font-mono font-bold text-[10px] sm:text-sm opacity-60">{{ r.id }}</div>
+                        <div class="hidden md:block text-center font-mono font-bold text-[10px] sm:text-sm opacity-60 truncate min-w-0">{{ r.id }}</div>
 
-                        <div class="pl-2 font-bold uppercase text-[10px] font-sans sm:text-sm tracking-tight sm:tracking-normal break-words leading-tight pr-1" title="{{ r.topic_name }}">{{ r.topic_name }}</div>
+                        <div class="pl-2 font-bold uppercase text-[10px] font-sans sm:text-sm tracking-tight sm:tracking-normal truncate min-w-0 pr-1" title="{{ r.topic_name }}">{{ r.topic_name }}</div>
 
-                        <div class="hidden md:block text-center font-mono font-bold text-gray-500">#{{ r.rank_position }}</div>
+                        <div class="hidden md:block text-center font-mono font-bold text-gray-500 truncate min-w-0">#{{ r.rank_position }}</div>
 
-                        <div class="pl-2 font-bold font-sans text-[10px] sm:text-sm tracking-tight sm:tracking-normal break-words leading-tight" title="{{ r.player_name }}">{{ r.player_name }}</div>
+                        <div class="pl-2 font-bold font-sans text-[10px] sm:text-sm tracking-tight sm:tracking-normal truncate min-w-0" title="{{ r.player_name }}">{{ r.player_name }}</div>
 
-                        <div class="text-center font-mono font-bold">{{ r.score }}</div>
+                        <div class="text-center font-mono font-bold truncate min-w-0">{{ r.score }}</div>
 
-                        <div class="hidden md:block text-center font-mono text-[10px] truncate opacity-80" title="{{ r.created_at }}">{{ r.created_at }}</div>
+                        <div class="hidden md:block text-center font-mono text-[10px] truncate opacity-80 min-w-0" title="{{ r.created_at }}">{{ r.created_at }}</div>
 
-                        <div class="text-center flex justify-center pl-1 sm:pl-0">
+                        <div class="text-center flex justify-center pl-1 sm:pl-0 min-w-0">
                             <a href="/admin/delete_result/{{ r.id }}" onclick="return confirm('DROP record from database permanently?')" class="bg-[#8b0000] text-[#f1ebd9] border border-black px-1 py-1 sm:px-2 font-bold uppercase text-[9px] sm:text-[10px] tracking-wider hover:bg-red-600 transition-colors w-full max-w-[50px] sm:max-w-auto text-center">
                                 DROP
                             </a>

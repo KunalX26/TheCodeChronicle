@@ -7,14 +7,19 @@
     <title>The Code Chronicle</title>
 
     <meta name="theme-color" content="#f1ebd9">
-    <link rel="manifest" href="/static/manifest.json">
 
-    <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico?v=2">
+    <link rel="manifest" href="/manifest.json">
 
-    <link rel="apple-touch-icon" sizes="180x180" href="/static/images/logo.png?v=2">
+    <meta name="mobile-web-app-capable" content="yes">
 
-    <link rel="icon" type="image/png" sizes="192x192" href="/static/images/logo.png?v=2">
-    <link rel="icon" type="image/png" sizes="512x512" href="/static/images/logo.png?v=2">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Chronicle">
+
+    <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/images/logo.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/static/images/logo.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/static/images/logo.png">
 
     <script src="https://cdn.tailwindcss.com"></script>
 
@@ -165,6 +170,18 @@ function updateDateTime() {
 
 setInterval(updateDateTime, 1000);
 updateDateTime();
+</script>
+
+<script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+            navigator.serviceWorker.register('/sw.js').then(function(registration) {
+                console.log('ServiceWorker registration successful with scope: ', registration.scope);
+            }, function(err) {
+                console.log('ServiceWorker registration failed: ', err);
+            });
+        });
+    }
 </script>
 
 </body>
