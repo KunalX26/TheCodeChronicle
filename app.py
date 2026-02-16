@@ -11,13 +11,15 @@ app.secret_key = os.environ.get("SECRET_KEY", "supersecretkey")
 # ---------------- DATABASE CONNECTION ----------------
 # CRITICAL FIX: This function dynamically reads from Render's Environment Variables
 # instead of hardcoding "localhost".
+# ---------------- DATABASE CONNECTION ----------------
 def get_db_connection():
     """Safely connects to the database for each request."""
     return mysql.connector.connect(
         host=os.environ.get("DB_HOST", "localhost"),
         user=os.environ.get("DB_USER", "root"),
         password=os.environ.get("DB_PASSWORD", ""),
-        database=os.environ.get("DB_NAME", "quiz_db")
+        database=os.environ.get("DB_NAME", "quiz_db"),
+        port=os.environ.get("DB_PORT", "3306")
     )
 
 
