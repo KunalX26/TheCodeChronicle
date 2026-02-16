@@ -13,7 +13,7 @@
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body class="paper-bg text-[#111] font-serif h-screen w-screen overflow-hidden flex flex-col p-2 sm:p-4 box-border selection:bg-black selection:text-[#f1ebd9]">
+<body class="paper-bg text-[#111] font-serif h-[100dvh] w-[100dvw] overflow-hidden flex flex-col p-2 sm:p-4 box-border selection:bg-black selection:text-[#f1ebd9]">
     <main class="border-[6px] border-double border-black h-full w-full flex flex-col relative bg-white/40 overflow-hidden animate-ink">
         <header class="flex-none border-b-[4px] border-black pb-2 pt-4 px-4 text-center">
             <h1 class="text-3xl sm:text-5xl font-black uppercase tracking-tighter leading-none" style="font-family: 'Times New Roman', Times, serif;">
@@ -24,7 +24,7 @@
         <div class="flex-grow flex flex-col items-center justify-center p-2 sm:p-4 overflow-hidden relative">
             <div class="h-full w-full max-w-3xl flex flex-col border-[3px] border-black bg-[#f1ebd9] shadow-[4px_4px_0px_rgba(0,0,0,1)]">
                 <div class="flex-none border-b-[3px] border-black bg-[#e5dfce]">
-                    <div class="grid grid-cols-[20%_60%_20%] font-black uppercase text-[10px] sm:text-xs tracking-widest p-2 sm:p-4 items-center">
+                    <div class="grid grid-cols-[15%_60%_25%] sm:grid-cols-[20%_60%_20%] font-black uppercase text-[10px] sm:text-xs tracking-widest p-2 sm:p-4 items-center">
                         <div class="text-center pr-1">Ref ID</div>
                         <div class="border-l border-black pl-3 truncate">Stack / Framework</div>
                         <div class="border-l border-black text-center text-red-800">Action</div>
@@ -33,11 +33,11 @@
 
                 <div class="flex-grow overflow-y-auto no-scrollbar bg-white/50">
                     {% for t in topics %}
-                    <div class="grid grid-cols-[20%_60%_20%] items-center text-sm sm:text-base p-2 sm:p-4 border-b border-dashed border-gray-400 hover:bg-black hover:text-[#f1ebd9] transition-colors duration-150">
+                    <div class="grid grid-cols-[15%_60%_25%] sm:grid-cols-[20%_60%_20%] items-center text-sm sm:text-base p-2 sm:p-4 border-b border-dashed border-gray-400 hover:bg-black hover:text-[#f1ebd9] transition-colors duration-150">
                         <div class="text-center font-mono font-bold">{{ t.id }}</div>
-                        <div class="pl-3 font-bold uppercase truncate font-mono" title="{{ t.name }}">{{ t.name }}</div>
+                        <div class="pl-3 font-bold uppercase truncate font-sans text-xs sm:text-base" title="{{ t.name }}">{{ t.name }}</div>
                         <div class="text-center flex justify-center">
-                            <a href="/admin/delete_topic/{{ t.id }}" onclick="return confirm('Warning: Deleting a stack drops all its connected queries. Proceed?')" class="bg-[#8b0000] text-[#f1ebd9] border border-black px-3 py-1 font-bold uppercase text-[10px] sm:text-xs tracking-wider hover:bg-red-600 transition-colors">
+                            <a href="/admin/delete_topic/{{ t.id }}" onclick="return confirm('Warning: Deleting a stack drops all its connected queries. Proceed?')" class="bg-[#8b0000] text-[#f1ebd9] border border-black px-2 py-1 font-bold uppercase text-[10px] sm:text-xs tracking-wider hover:bg-red-600 transition-colors">
                                 DROP
                             </a>
                         </div>

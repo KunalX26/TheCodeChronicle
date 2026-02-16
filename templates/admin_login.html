@@ -5,127 +5,60 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Sysadmin Login | The Code Chronicle</title>
     <script src="https://cdn.tailwindcss.com"></script>
-
     <style>
-        .paper-bg {
-            background-color: #f1ebd9;
-            background-image: repeating-linear-gradient(
-                45deg,
-                transparent,
-                transparent 2px,
-                rgba(0,0,0,0.02) 2px,
-                rgba(0,0,0,0.02) 4px
-            );
-        }
-
-        @keyframes inkFade {
-            0% { opacity: 0; filter: blur(3px); transform: translateY(5px); }
-            100% { opacity: 1; filter: blur(0); transform: translateY(0); }
-        }
-
-        .animate-ink {
-            animation: inkFade 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-        }
+        .paper-bg { background-color: #f1ebd9; background-image: repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(0,0,0,0.02) 2px, rgba(0,0,0,0.02) 4px); }
+        @keyframes inkFade { 0% { opacity: 0; filter: blur(3px); transform: translateY(5px); } 100% { opacity: 1; filter: blur(0); transform: translateY(0); } }
+        .animate-ink { animation: inkFade 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
     </style>
 </head>
-
-<body class="paper-bg text-[#111] font-serif h-screen w-screen overflow-hidden flex flex-col p-2 sm:p-4 box-border selection:bg-black selection:text-[#f1ebd9]">
-
-<main class="border-[6px] border-double border-black h-full w-full flex flex-col relative bg-white/40 overflow-hidden animate-ink">
-
-    <header class="flex-none border-b-[4px] border-black pb-2 pt-4 px-4 text-center relative">
-
-        <div class="flex justify-between items-center text-[10px] sm:text-xs font-bold uppercase tracking-widest border-b-2 border-black pb-2 mb-2">
-            <div class="w-1/3 text-left">
-                <a href="/">
-                    <button class="border-2 border-black px-2 py-1 text-[9px] sm:text-[10px] leading-none font-bold uppercase tracking-widest bg-black text-[#f1ebd9] hover:bg-transparent hover:text-black transition-colors duration-200">
-                        ← Home
-                    </button>
-                </a>
-            </div>
-            <div class="w-1/3 text-center">
-                <span>The Code Chronicle</span>
-            </div>
-            <div class="w-1/3 text-right">
-                <span>Authorized Only</span>
-            </div>
-        </div>
-
-        <h1 class="text-4xl sm:text-6xl font-black uppercase tracking-tighter leading-none"
-            style="font-family: 'Times New Roman', Times, serif;">
-            Root Access
-        </h1>
-
-        <p class="italic text-[10px] sm:text-sm border-t border-black pt-1 mt-2">
-            "Please present your credentials to proceed to the terminal."
-        </p>
-    </header>
-
-    <div class="flex-grow flex flex-col items-center justify-center p-4 relative overflow-hidden">
-
-        <form method="POST"
-              class="w-full max-w-sm border-[4px] border-black p-6 sm:p-8 bg-[#f1ebd9] shadow-[8px_8px_0px_rgba(0,0,0,1)]">
-
-            <h2 class="text-xl font-black uppercase text-center border-b-2 border-dashed border-black pb-2 mb-6 font-mono">
-                > Identity Verification
-            </h2>
-
-            {% if error %}
-                <div class="mb-4 text-red-600 text-sm font-bold text-center border border-red-600 p-2 bg-red-100">
-                    {{ error }}
+<body class="paper-bg text-[#111] font-serif h-[100dvh] w-[100dvw] overflow-hidden flex flex-col p-2 sm:p-4 box-border selection:bg-black selection:text-[#f1ebd9]">
+    <main class="border-[6px] border-double border-black h-full w-full flex flex-col relative bg-white/40 overflow-hidden animate-ink">
+        <header class="flex-none border-b-[4px] border-black pb-2 pt-4 px-4 text-center relative">
+            <div class="flex justify-between items-center text-[10px] sm:text-xs font-bold uppercase tracking-widest border-b-2 border-black pb-2 mb-2">
+                <div class="w-1/3 text-left">
+                    <a href="/"><button class="border-2 border-black px-2 py-1 text-[9px] sm:text-[10px] leading-none font-bold uppercase tracking-widest bg-black text-[#f1ebd9] hover:bg-transparent hover:text-black transition-colors duration-200">← Home</button></a>
                 </div>
-            {% endif %}
+                <div class="w-1/3 text-center"><span>The Code Chronicle</span></div>
+                <div class="w-1/3 text-right"><span>Authorized Only</span></div>
+            </div>
+            <h1 class="text-4xl sm:text-6xl font-black uppercase tracking-tighter leading-none" style="font-family: 'Times New Roman', Times, serif;">
+                Root Access
+            </h1>
+            <p class="italic text-[10px] sm:text-sm border-t border-black pt-1 mt-2">
+                "Please present your credentials to proceed to the terminal."
+            </p>
+        </header>
 
-            {% with messages = get_flashed_messages() %}
-                {% if messages %}
-                    <div class="mb-4 text-blue-700 text-sm font-bold text-center border border-blue-700 p-2 bg-blue-100">
-                        {{ messages[0] }}
+        <div class="flex-grow flex flex-col items-center justify-center p-4 relative overflow-hidden">
+            <form method="POST" class="w-full max-w-sm border-[4px] border-black p-6 sm:p-8 bg-[#f1ebd9] shadow-[8px_8px_0px_rgba(0,0,0,1)]">
+                <h2 class="text-xl font-black uppercase text-center border-b-2 border-dashed border-black pb-2 mb-6 font-mono">
+                    > Identity Verification
+                </h2>
+                {% if error %}<div class="mb-4 text-red-600 text-sm font-bold text-center border border-red-600 p-2 bg-red-100">{{ error }}</div>{% endif %}
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}<div class="mb-4 text-blue-700 text-sm font-bold text-center border border-blue-700 p-2 bg-blue-100">{{ messages[0] }}</div>{% endif %}
+                {% endwith %}
+                <div class="space-y-6 mb-8 font-mono">
+                    <div>
+                        <label class="block font-bold uppercase text-xs tracking-widest mb-1">Username:</label>
+                        <input type="text" name="username" placeholder="admin_user..." required class="w-full bg-transparent border-b-2 border-black focus:border-b-4 focus:outline-none transition-all py-1 placeholder-gray-500 font-bold text-lg">
                     </div>
-                {% endif %}
-            {% endwith %}
-
-            <div class="space-y-6 mb-8 font-mono">
-
-                <div>
-                    <label class="block font-bold uppercase text-xs tracking-widest mb-1">
-                        Username:
-                    </label>
-                    <input type="text"
-                           name="username"
-                           placeholder="admin_user..."
-                           required
-                           class="w-full bg-transparent border-b-2 border-black focus:border-b-4 focus:outline-none transition-all py-1 placeholder-gray-500 font-bold text-lg">
+                    <div>
+                        <label class="block font-bold uppercase text-xs tracking-widest mb-1">SSH Key / Password:</label>
+                        <input type="password" name="password" placeholder="••••••••" required class="w-full bg-transparent border-b-2 border-black focus:border-b-4 focus:outline-none transition-all py-1 placeholder-gray-500 font-bold text-lg">
+                    </div>
                 </div>
-
-                <div>
-                    <label class="block font-bold uppercase text-xs tracking-widest mb-1">
-                        SSH Key / Password:
-                    </label>
-                    <input type="password"
-                           name="password"
-                           placeholder="••••••••"
-                           required
-                           class="w-full bg-transparent border-b-2 border-black focus:border-b-4 focus:outline-none transition-all py-1 placeholder-gray-500 font-bold text-lg">
-                </div>
-
-            </div>
-
-            <button type="submit"
-                    class="w-full bg-black text-[#f1ebd9] font-black uppercase tracking-[0.2em] py-3 border-2 border-black hover:bg-transparent hover:text-black transition-colors duration-200">
-                Authenticate
-            </button>
-
-        </form>
-
-    </div>
-
-    <footer class="flex-none border-t-[4px] border-black bg-[#e5dfce] px-4 py-2 sm:py-3 text-center">
-        <div class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-gray-600">
-            Violation of server protocols will be logged and prosecuted.
+                <button type="submit" class="w-full bg-black text-[#f1ebd9] font-black uppercase tracking-[0.2em] py-3 border-2 border-black hover:bg-transparent hover:text-black transition-colors duration-200">
+                    Authenticate
+                </button>
+            </form>
         </div>
-    </footer>
 
-</main>
-
+        <footer class="flex-none border-t-[4px] border-black bg-[#e5dfce] px-4 py-2 sm:py-3 text-center">
+            <div class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-gray-600">
+                Violation of server protocols will be logged and prosecuted.
+            </div>
+        </footer>
+    </main>
 </body>
 </html>

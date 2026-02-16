@@ -21,7 +21,7 @@
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body class="paper-bg text-[#111] font-serif h-screen w-screen overflow-hidden flex flex-col p-2 sm:p-4 box-border selection:bg-black selection:text-[#f1ebd9]">
+<body class="paper-bg text-[#111] font-serif h-[100dvh] w-[100dvw] overflow-hidden flex flex-col p-2 sm:p-4 box-border selection:bg-black selection:text-[#f1ebd9]">
     <main class="border-[6px] border-double border-black h-full w-full flex flex-col relative bg-white/40 overflow-hidden animate-ink">
 
         <header class="flex-none border-b-[4px] border-black pb-2 pt-4 px-4 text-center">
@@ -39,11 +39,11 @@
             <div class="h-full flex flex-col border-[3px] border-black bg-[#f1ebd9] shadow-[4px_4px_0px_rgba(0,0,0,1)]">
 
                 <div class="flex-none border-b-[3px] border-black bg-[#e5dfce]">
-                    <div class="grid grid-cols-[30%_30%_20%_20%] md:grid-cols-[5%_20%_10%_20%_10%_20%_15%] font-black uppercase text-[10px] sm:text-xs tracking-widest p-2 sm:p-3 items-center text-center">
+                    <div class="grid grid-cols-[30%_35%_15%_20%] md:grid-cols-[5%_20%_10%_20%_10%_20%_15%] font-black uppercase text-[10px] sm:text-xs tracking-widest p-2 sm:p-3 items-center text-center">
                         <div class="hidden md:block pr-1">ID</div>
-                        <div class="md:border-l md:border-black truncate text-left pl-2">Stack</div>
+                        <div class="md:border-l md:border-black text-left pl-2 whitespace-nowrap">Stack</div>
                         <div class="hidden md:block border-l border-black">Rank</div>
-                        <div class="border-l border-black truncate text-left pl-2">Alias</div>
+                        <div class="border-l border-black text-left pl-2 whitespace-nowrap">Alias</div>
                         <div class="border-l border-black">Score</div>
                         <div class="hidden md:block border-l border-black truncate">Date</div>
                         <div class="border-l border-black text-red-800">Action</div>
@@ -52,22 +52,22 @@
 
                 <div class="flex-grow overflow-y-auto no-scrollbar bg-white/50">
                     {% for r in rankings %}
-                    <div class="grid grid-cols-[30%_30%_20%_20%] md:grid-cols-[5%_20%_10%_20%_10%_20%_15%] items-center text-xs sm:text-sm p-2 sm:p-3 border-b border-dashed border-gray-400 hover:bg-black hover:text-[#f1ebd9] transition-colors duration-150 cursor-default">
+                    <div class="grid grid-cols-[30%_35%_15%_20%] md:grid-cols-[5%_20%_10%_20%_10%_20%_15%] items-center text-xs sm:text-sm p-2 sm:p-3 border-b border-dashed border-gray-400 hover:bg-black hover:text-[#f1ebd9] transition-colors duration-150 cursor-default">
 
                         <div class="hidden md:block text-center font-mono font-bold text-[10px] sm:text-sm opacity-60">{{ r.id }}</div>
 
-                        <div class="pl-2 font-bold uppercase text-[9px] sm:text-sm truncate pr-1 font-mono" title="{{ r.topic_name }}">{{ r.topic_name }}</div>
+                        <div class="pl-2 font-bold uppercase text-[10px] font-sans sm:text-sm tracking-tight sm:tracking-normal break-words leading-tight pr-1" title="{{ r.topic_name }}">{{ r.topic_name }}</div>
 
                         <div class="hidden md:block text-center font-mono font-bold text-gray-500">#{{ r.rank_position }}</div>
 
-                        <div class="pl-2 font-bold font-mono text-[10px] sm:text-sm truncate" title="{{ r.player_name }}">{{ r.player_name }}</div>
+                        <div class="pl-2 font-bold font-sans text-[10px] sm:text-sm tracking-tight sm:tracking-normal break-words leading-tight" title="{{ r.player_name }}">{{ r.player_name }}</div>
 
                         <div class="text-center font-mono font-bold">{{ r.score }}</div>
 
                         <div class="hidden md:block text-center font-mono text-[10px] truncate opacity-80" title="{{ r.created_at }}">{{ r.created_at }}</div>
 
                         <div class="text-center flex justify-center pl-1 sm:pl-0">
-                            <a href="/admin/delete_result/{{ r.id }}" onclick="return confirm('DROP record from database permanently?')" class="bg-[#8b0000] text-[#f1ebd9] border border-black px-2 py-1 font-bold uppercase text-[10px] tracking-wider hover:bg-red-600 transition-colors w-full sm:w-auto text-center">
+                            <a href="/admin/delete_result/{{ r.id }}" onclick="return confirm('DROP record from database permanently?')" class="bg-[#8b0000] text-[#f1ebd9] border border-black px-1 py-1 sm:px-2 font-bold uppercase text-[9px] sm:text-[10px] tracking-wider hover:bg-red-600 transition-colors w-full max-w-[50px] sm:max-w-auto text-center">
                                 DROP
                             </a>
                         </div>
