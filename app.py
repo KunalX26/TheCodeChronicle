@@ -1,21 +1,18 @@
 from flask import Flask, render_template, request, redirect, session
 import mysql.connector
-import os
+from functools import wraps
+from flask import abort
+
 
 app = Flask(__name__)
-app.secret_key = os.environ.get("SECRET_KEY", "supersecret")
+app.secret_key = "supersecretkey"
 
-
-# ---------------- DATABASE CONNECTION ----------------
-def get_db_connection():
-    return mysql.connector.connect(
-        host=os.environ.get("DB_HOST"),
-        user=os.environ.get("DB_USER"),
-        password=os.environ.get("DB_PASSWORD"),
-        database=os.environ.get("DB_NAME"),
-        port=int(os.environ.get("DB_PORT", 3306))
-    )
-
+db = mysql.connector.connect(
+    host="localhost",
+    user="root",
+    password="",
+    database="quiz_db"
+)
 
 # ---------------- HOME ----------------
 @app.route('/', methods=['GET', 'POST'])
@@ -24,6 +21,22 @@ def home():
         session['player_name'] = request.form['name']
         return redirect('/topics')
     return render_template("index.html")
+
+
+# ---------------- AUTHORIZATION ERROR ----------------
+def admin_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'admin' not in session:
+            abort(403)  # Authorization error
+        return f(*args, **kwargs)
+    return decorated_function
+
+
+@app.errorhandler(403)
+def forbidden(e):
+    return render_template("403.html"), 403
+
 
 
 # ---------------- TOPICS ----------------
@@ -113,7 +126,6 @@ def update_rankings(topic_id):
 
     cursor = db.cursor(dictionary=True)
 
-    # Order by score DESC
     cursor.execute("""
         SELECT id, score
         FROM results
@@ -135,18 +147,32 @@ def update_rankings(topic_id):
         rank += 1
 
 
+
 # ---------------- DELETE RANKINGS ----------------
 @app.route('/admin/delete_result/<int:result_id>')
+@admin_required
 def delete_result(result_id):
 
-    if 'admin' not in session:
-        return redirect('/admin')
+    cursor = db.cursor(dictionary=True)
 
-    cursor = db.cursor()
-    cursor.execute("DELETE FROM results WHERE id=%s", (result_id,))
-    db.commit()
+    # Get topic_id before deleting
+    cursor.execute("SELECT topic_id FROM results WHERE id=%s", (result_id,))
+    row = cursor.fetchone()
+
+    if row:
+        topic_id = row['topic_id']
+
+        # Delete result
+        cursor2 = db.cursor()
+        cursor2.execute("DELETE FROM results WHERE id=%s", (result_id,))
+        db.commit()
+
+        # Recalculate ranking
+        update_rankings(topic_id)
 
     return redirect('/admin/rankings')
+
+
 
 
 
@@ -185,8 +211,11 @@ def admin():
         if cursor.fetchone():
             session['admin'] = True
             return redirect('/admin/dashboard')
+        else:
+            return render_template("admin_login.html", error="Invalid Credentials")
 
     return render_template("admin_login.html")
+
 
 
 @app.route('/admin/logout')
@@ -197,15 +226,14 @@ def admin_logout():
 
 # ---------------- ADMIN RANKINGS ----------------
 @app.route('/admin/rankings')
+@admin_required
 def admin_rankings():
-
-    if 'admin' not in session:
-        return redirect('/admin')
 
     cursor = db.cursor(dictionary=True)
 
     cursor.execute("""
-        SELECT r.player_name, r.score, r.rank_position,
+        SELECT r.id, r.player_name, r.score, r.rank_position,
+               r.topic_id,
                t.name AS topic_name, r.created_at
         FROM results r
         JOIN topics t ON r.topic_id = t.id
@@ -218,14 +246,17 @@ def admin_rankings():
                            rankings=rankings)
 
 
+
 # ---------------- ADMIN DASHBOARD ----------------
 @app.route('/admin/dashboard')
+@admin_required
 def dashboard():
     return render_template("admin_dashboard.html")
 
 
 # ---------------- ADD TOPIC ----------------
 @app.route('/admin/add_topic', methods=['GET', 'POST'])
+@admin_required
 def add_topic():
     if request.method == 'POST':
         name = request.form['name']
@@ -238,6 +269,7 @@ def add_topic():
 
 # ---------------- DELETE TOPIC ----------------
 @app.route('/admin/delete_topic/<int:topic_id>')
+@admin_required
 def delete_topic(topic_id):
 
     if 'admin' not in session:
@@ -252,6 +284,7 @@ def delete_topic(topic_id):
 
 # ---------------- MANAGE TOPIC ----------------
 @app.route('/admin/manage_topics')
+@admin_required
 def manage_topics():
 
     if 'admin' not in session:
@@ -266,6 +299,7 @@ def manage_topics():
 
 # ---------------- MANAGE QUESTION ----------------
 @app.route('/admin/manage_questions')
+@admin_required
 def manage_questions():
 
     if 'admin' not in session:
@@ -285,6 +319,7 @@ def manage_questions():
 
 # ---------------- ADD QUESTION ----------------
 @app.route('/admin/add_question', methods=['GET', 'POST'])
+@admin_required
 def add_question():
     cursor = db.cursor(dictionary=True)
     cursor.execute("SELECT * FROM topics")
@@ -313,6 +348,7 @@ def add_question():
 
 # ---------------- DELETE QUESTION ----------------
 @app.route('/admin/delete_question/<int:question_id>')
+@admin_required
 def delete_question(question_id):
 
     if 'admin' not in session:
@@ -327,4 +363,4 @@ def delete_question(question_id):
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
+    app.run(debug=True)
