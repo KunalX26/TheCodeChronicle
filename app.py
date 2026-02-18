@@ -72,12 +72,14 @@ def ready(topic_id):
 def quiz(topic_id):
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
+
+    # CHANGED: Removed "LIMIT 15" completely.
+    # Now it will fetch every single question for this topic in a random order.
     cursor.execute("""
         SELECT id, question, option1, option2, option3, option4, correct_option
         FROM questions
         WHERE topic_id=%s
         ORDER BY RAND()
-        LIMIT 15
     """, (topic_id,))
 
     questions = cursor.fetchall()
@@ -90,7 +92,6 @@ def quiz(topic_id):
     conn.close()
 
     return render_template("quiz.html", questions=questions, topic_id=topic_id)
-
 
 # ---------------- SUBMIT ----------------
 @app.route('/submit/<int:topic_id>', methods=['POST'])
