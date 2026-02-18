@@ -4,22 +4,18 @@ import mysql.connector
 from functools import wraps
 
 app = Flask(__name__)
-# Uses a secure key if provided by the server, otherwise falls back to local testing key
+# Securely get secret key from Render, or use a default for local testing
 app.secret_key = os.environ.get("SECRET_KEY", "supersecretkey")
 
-
-# ---------------- DATABASE CONNECTION ----------------
-# CRITICAL FIX: This function dynamically reads from Render's Environment Variables
-# instead of hardcoding "localhost".
-# ---------------- DATABASE CONNECTION ----------------
+# ---------------- DATABASE CONNECTION (THE FIX) ----------------
 def get_db_connection():
-    """Safely connects to the database for each request."""
+
     return mysql.connector.connect(
         host=os.environ.get("DB_HOST", "localhost"),
         user=os.environ.get("DB_USER", "root"),
         password=os.environ.get("DB_PASSWORD", ""),
-        database=os.environ.get("DB_NAME", "quiz_db"),
-        port=os.environ.get("DB_PORT", "3306")
+        database=os.environ.get("DB_NAME", "defaultdb"),
+        port=int(os.environ.get("DB_PORT", 24811))
     )
 
 
