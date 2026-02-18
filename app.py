@@ -77,7 +77,7 @@ def quiz(topic_id):
         FROM questions
         WHERE topic_id=%s
         ORDER BY RAND()
-        LIMIT 10
+        LIMIT 15
     """, (topic_id,))
 
     questions = cursor.fetchall()
