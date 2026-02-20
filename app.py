@@ -294,15 +294,27 @@ def add_topic():
 
 
 # ---------------- DELETE TOPIC ----------------
-@app.route('/admin/delete_topic/<int:topic_id>')
+@app.route('/admin/delete_topic/<int:topic_id>', methods=['POST'])
 @admin_required
 def delete_topic(topic_id):
+
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute("DELETE FROM topics WHERE id=%s", (topic_id,))
-    conn.commit()
-    cursor.close()
-    conn.close()
+
+    try:
+        cursor.execute("DELETE FROM results WHERE topic_id=%s", (topic_id,))
+        cursor.execute("DELETE FROM questions WHERE topic_id=%s", (topic_id,))
+        cursor.execute("DELETE FROM topics WHERE id=%s", (topic_id,))
+        conn.commit()
+
+    except Exception as e:
+        conn.rollback()
+        print("Delete Error:", e)
+
+    finally:
+        cursor.close()
+        conn.close()
+
     return redirect('/admin/manage_topics')
 
 
