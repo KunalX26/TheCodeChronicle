@@ -38,20 +38,20 @@
         </header>
 
         <div class="flex-grow flex flex-col p-4 overflow-hidden relative">
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 overflow-y-auto no-scrollbar pb-4 h-full content-start">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 overflow-y-auto no-scrollbar pb-4 h-full content-start">
                 {% for t in topics %}
-                <div class="border-[2px] sm:border-[3px] border-black bg-[#f1ebd9] p-2 sm:p-3 shadow-[3px_3px_0px_rgba(0,0,0,1)] sm:shadow-[4px_4px_0px_rgba(0,0,0,1)] flex flex-col justify-between hover:bg-white transition-colors duration-200 min-w-0">
+                <div class="border-[3px] border-black bg-[#f1ebd9] p-3 shadow-[4px_4px_0px_rgba(0,0,0,1)] flex flex-col justify-between hover:bg-white transition-colors duration-200 min-w-0">
 
-                    <h3 class="font-black uppercase text-[12px] sm:text-lg leading-tight border-b-2 border-black pb-1 mb-3 sm:mb-4 truncate min-w-0" title="{{ t.name }}">
+                    <h3 class="font-black uppercase text-lg leading-tight border-b-2 border-black pb-1 mb-4 truncate min-w-0" title="{{ t.name }}">
                         {{ t.name }}
                     </h3>
 
-                    <div class="flex flex-col gap-1.5 sm:gap-2 mt-auto">
-                        <a href="/ready/{{ t.id }}" class="w-full bg-black text-[#f1ebd9] font-bold uppercase text-[9px] sm:text-xs text-center py-1.5 sm:py-2 border-2 border-black hover:bg-transparent hover:text-black transition-all truncate px-1" title="Compile & Run">
-                            ▶ <span class="hidden sm:inline">Compile & Run</span><span class="sm:hidden">Run</span>
+                    <div class="flex flex-col gap-2 mt-auto">
+                        <a href="/ready/{{ t.id }}" class="w-full bg-black text-[#f1ebd9] font-bold uppercase text-xs text-center py-2 border-2 border-black hover:bg-transparent hover:text-black transition-all">
+                            ▶ Compile & Run
                         </a>
-                        <a href="/leaderboard/{{ t.id }}" class="w-full bg-transparent text-black font-bold uppercase text-[9px] sm:text-xs text-center py-1.5 sm:py-2 border-2 border-black hover:bg-black hover:text-[#f1ebd9] transition-all truncate px-1" title="View Benchmarks">
-                            ★ <span class="hidden sm:inline">View Benchmarks</span><span class="sm:hidden">Stats</span>
+                        <a href="/leaderboard/{{ t.id }}" class="w-full bg-transparent text-black font-bold uppercase text-xs text-center py-2 border-2 border-black hover:bg-black hover:text-[#f1ebd9] transition-all">
+                            ★ View Benchmarks
                         </a>
                     </div>
                 </div>
